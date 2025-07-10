@@ -1,0 +1,38 @@
+.datatable-filters {
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 20px;
+
+    .datatable-filters__search {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .datatable-filters__actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+
+        .datatable-filters__actions__button {
+            margin-left: 1rem;
+        }
+    }
+}
+
+.resizer {
+    display: inline-block;
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(50%);
+    z-index: 1;
+    touch-action: none;
+}
