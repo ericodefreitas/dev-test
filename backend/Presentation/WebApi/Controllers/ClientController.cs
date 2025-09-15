@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Client.Queries.ClientByDocumentNumberQuery;
 
 namespace WebApi.Controllers
 {
@@ -45,6 +46,14 @@ namespace WebApi.Controllers
         {
             var response = await _mediator.Send(new ClientByIdQueryRequest { Id = id });
 
+            return Ok(response);
+        }
+
+        [HttpGet("clients")]
+        [ProducesResponseType(typeof(ClientByDocumentNumberQueryResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByDocumentNumber([FromQuery(Name = "document")] string documentNumber)
+        {
+            var response = await _mediator.Send(new ClientByDocumentNumberQueryRequest { DocumentNumber = documentNumber});
             return Ok(response);
         }
     }
