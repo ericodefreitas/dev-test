@@ -8,10 +8,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { mountRoute } from "@/utils/mountRoute";
 import Loader from "@/components/Loader";
 import ClientService from "@/services/ClientService";
+import { TextFormFieldProps } from "@/components/form/TextFormField/TextFormField";
+import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
 
 const ClientListing = () => {
     const navigate = useNavigate();
     const [date, setDate] = useState<Date>();
+
+    const clientFilters: TextFormFieldProps<any>[] = [
+        {
+            name: "documentNumber",
+            label: "Número do Documento",
+            componentType: TextFormFieldType.INPUT,
+            type: "text",
+            placeholder: "Digite o número do documento",
+            defaultValue: "",
+            renderIf: true,
+        },
+    ];
 
     useEffect(() => {
         setDate(new Date());
@@ -42,11 +56,16 @@ const ClientListing = () => {
                         { Header: "Documento", accessor: "documentNumber" },
                     ]}
                     query={async (filters) => {
+                        const documentFilter = filters.find(f => f.name === "documentNumber" && f.value);
+                        if (documentFilter && documentFilter.value) {
+                            const client = await ClientService.getByDocumentNumber(documentFilter.value as string);
+                            return client ? [client] : [];
+                        }
                         return await ClientService.getAll();
                     }}
                     fetchButton
                     cleanButton
-                    filters={[]}
+                    filters={clientFilters}
                     queryName={["client", "listing", date]}
                 />
             </Suspense>
