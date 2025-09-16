@@ -54,6 +54,19 @@ const ClientListing = () => {
                         { Header: "Email", accessor: "email" },
                         { Header: "Telefone", accessor: "phoneNumber" },
                         { Header: "Documento", accessor: "documentNumber" },
+                        {
+                            Header: "Ações",
+                            accessor: "id",
+                            Cell: ({ row }: any) => (
+                                <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    onClick={() => navigate(`/clientes/editar/${row.original.id}`)}
+                                >
+                                    Editar
+                                </Button>
+                            ),
+                        },
                     ]}
                     query={async (filters) => {
                         const documentFilter = filters.find(f => f.name === "documentNumber" && f.value);

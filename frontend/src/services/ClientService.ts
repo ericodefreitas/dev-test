@@ -22,8 +22,8 @@ class ClientService extends BaseService {
     return await this.get<Client>(`clients?document=${encodeURIComponent(documentNumber)}`);
   }
 
-  async update(id: string, client: Client): Promise<void> {
-    return await this.put<Client, void>(id, client);
+  async update(client: Client): Promise<string> {
+    return await this.put<Client, string>("", client);
   }
 }
 

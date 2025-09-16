@@ -1,14 +1,15 @@
 ﻿using Application.Client.Commands.CreateClient;
+using Application.Client.Commands.UpdateClient;
 using Application.Client.Queries.AllClientsQuery;
+using Application.Client.Queries.ClientByDocumentNumberQuery;
 using Application.Client.Queries.ClientByIdQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Client.Queries.ClientByDocumentNumberQuery;
 
 namespace WebApi.Controllers
 {
@@ -27,6 +28,14 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
         public async Task<IActionResult> Create([FromBody] CreateClientCommandRequest request)
+        {
+            var response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Update([FromBody] UpdateClientCommandRequest request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);
