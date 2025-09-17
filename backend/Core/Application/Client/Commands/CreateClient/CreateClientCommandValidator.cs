@@ -26,6 +26,10 @@ namespace Application.Client.Commands.CreateClient
                .NotEmpty()
                .WithMessage((obj, propertyValue) => $"DocumentNumber obrigatório");
 
+            RuleFor(x => x.BirthDate)
+               .NotEmpty()
+               .WithMessage((obj, propertyValue) => $"BirthDate obrigatório");
+
             RuleFor(x => x.Address)
                 .NotNull()
                 .WithMessage((obj, propertyValue) => $"Address obrigatório")

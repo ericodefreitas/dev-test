@@ -10,6 +10,7 @@ import Loader from "@/components/Loader";
 import ClientService from "@/services/ClientService";
 import { TextFormFieldProps } from "@/components/form/TextFormField/TextFormField";
 import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
+import { formatDateToDisplay } from "@/utils/dateUtils";
 
 const ClientListing = () => {
     const navigate = useNavigate();
@@ -54,6 +55,11 @@ const ClientListing = () => {
                         { Header: "Email", accessor: "email" },
                         { Header: "Telefone", accessor: "phoneNumber" },
                         { Header: "Documento", accessor: "documentNumber" },
+                        {
+                            Header: "Data de Nascimento",
+                            accessor: "birthDate",
+                            Cell: ({ value }: any) => formatDateToDisplay(value),
+                        },
                         {
                             Header: "Ações",
                             accessor: "id",

@@ -30,6 +30,7 @@ namespace Application.Client.Commands.UpdateClient
                 request.PhoneNumber,
                 request.Email,
                 request.DocumentNumber,
+                request.BirthDate,
                 new Domain.Address(
                     request.Address.PostalCode,
                     request.Address.AddressLine,
