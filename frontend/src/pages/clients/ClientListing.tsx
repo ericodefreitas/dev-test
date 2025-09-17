@@ -11,6 +11,7 @@ import ClientService from "@/services/ClientService";
 import { TextFormFieldProps } from "@/components/form/TextFormField/TextFormField";
 import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
 import { formatDateToDisplay } from "@/utils/dateUtils";
+import { toastr } from "@/utils/toastr";
 
 const ClientListing = () => {
     const navigate = useNavigate();
@@ -32,12 +33,14 @@ const ClientListing = () => {
 
         try {
             await ClientService.uploadCsvForImport(formData);
-            alert("Arquivo enviado com sucesso para processamento.");            
+            toastr({ title: "Sucesso", text: "Arquivo enviado com sucesso para processamento.", icon: "success" });
+            setTimeout(() => {
+                setDate(new Date());
+            }, 5000);
         } catch (error) {
             console.error("Erro ao enviar o arquivo:", error);
-            alert("Falha ao enviar o arquivo.");
+            toastr({ title: "Erro", text: "Falha ao enviar o arquivo.", icon: "error" });
         }
-
         if (event.target) {
             event.target.value = "";
         }
