@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Client.Commands.CreateClient
+namespace Application.Client.Commands.UpdateClient
 {
-    public class CreateClientCommandValidator : AbstractValidator<CreateClientCommandRequest>
+    public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommandRequest>
     {
-        public CreateClientCommandValidator()
+        public UpdateClientCommandValidator()
         {
             RuleFor(x => x.FirstName)
                .NotEmpty()

@@ -1,10 +1,8 @@
-﻿using Application.Common.Behaviours;
+﻿using Application.Client.Services;
+using Application.Common.Behaviours;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Application
 {
@@ -14,6 +12,8 @@ namespace Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
+            services.AddHostedService<ClientCsvImportHostedService>();
 
             return services;
         }

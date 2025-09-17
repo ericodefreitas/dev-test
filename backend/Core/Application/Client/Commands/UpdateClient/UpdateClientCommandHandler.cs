@@ -6,20 +6,25 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Client.Commands.CreateClient
+namespace Application.Client.Commands.UpdateClient
 {
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommandRequest, Guid>
+    public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommandRequest, Guid>
     {
         private readonly IClientControlContext _context;
 
-        public CreateClientCommandHandler(IClientControlContext context)
+        public UpdateClientCommandHandler(IClientControlContext context)
         {
             _context = context;
         }
 
-        public async Task<Guid> Handle(CreateClientCommandRequest request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(UpdateClientCommandRequest request, CancellationToken cancellationToken)
         {
-            var client = new Domain.Client(
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == request.Id) ?? throw new BadRequestException("Client not found");
+
+            if (await _context.Clients.AnyAsync(x => x.DocumentNumber == client.DocumentNumber && x.Id != request.Id))
+                throw new BadRequestException("Document already exists");
+
+            client.Update(
                 request.FirstName,
                 request.LastName,
                 request.PhoneNumber,
@@ -35,10 +40,7 @@ namespace Application.Client.Commands.CreateClient
                     request.Address.City,
                     request.Address.State));
 
-            if (await _context.Clients.AnyAsync(x => x.DocumentNumber == client.DocumentNumber))
-                throw new BadRequestException("Document already exists");
-
-            await _context.Clients.AddAsync(client, cancellationToken);
+            _context.Clients.Update(client);
             await _context.SaveChangesAsync(cancellationToken);
 
             return client.Id;

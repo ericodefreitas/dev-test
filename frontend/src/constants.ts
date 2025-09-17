@@ -26,6 +26,10 @@ export const NAVIGATION_PATH = {
             RELATIVE: "criar",
             ABSOLUTE: "/clientes/criar"
         },
+        UPDATE: {
+            RELATIVE: "editar/:id",
+            ABSOLUTE: "/clientes/editar"
+        },
         
     }
 }

@@ -14,6 +14,7 @@ import yup from "@/utils/yup";
 import React, { Suspense } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
+import { parseDateString } from "@/utils/dateUtils";
 
 const INITIAL_VALUES: Client = {
   firstName: "",
@@ -21,6 +22,7 @@ const INITIAL_VALUES: Client = {
   phoneNumber: "",
   email: "",
   documentNumber: "",
+  birthDate: "",
   address: {
     postalCode: "",
     addressLine: "",
@@ -38,6 +40,7 @@ const schemaValidation = yup.object().shape({
   phoneNumber: yup.string().required("Telefone é obrigatório"),
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   documentNumber: yup.string().required("Documento é obrigatório"),
+  birthDate: yup.string().required("Data de Nascimento é obrigatória"),
   address: yup.object().shape({
     postalCode: yup.string().required("CEP é obrigatório"),
     addressLine: yup.string().required("Endereço é obrigatório"),
@@ -66,6 +69,9 @@ const ClientForm = () => {
       const clientToSave: Client = {
         ...values,
         phoneNumber: values.phoneNumber.replace(/\D/g, ''),
+        birthDate: values.birthDate
+        ? parseDateString(values.birthDate)
+        : "",
         address: {
           ...values.address,
           postalCode: values.address.postalCode.replace(/\D/g, ''),
@@ -174,6 +180,25 @@ const ClientForm = () => {
                         value={values.documentNumber}
                         formikError={errors.documentNumber}
                       />
+                    </Col>
+                    <Col md={4}>
+                        <TextFormField
+                            componentType={TextFormFieldType.DATE_PICKER}
+                            name="birthDate"
+                            label="Data de Nascimento"
+                            required
+                            placeholder="Data de Nascimento"
+                            handleChange={handleChange}
+                            formikError={errors.birthDate}
+                            showYearDropdown
+                            showMonthDropdown
+                            minDate={new Date(1901, 0, 1)}
+                            maxDate={new Date()}
+                            dateFormat="dd/MM/yyyy"
+                            locale="pt-BR"
+                            customInput={<input type="text" />}
+                            value={values.birthDate || undefined}
+                        />
                     </Col>
                   </Row>
                   <br />

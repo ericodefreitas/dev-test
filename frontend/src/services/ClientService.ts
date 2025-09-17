@@ -18,8 +18,16 @@ class ClientService extends BaseService {
     return await this.get<Client>(id);
   }
 
-  async update(id: string, client: Client): Promise<void> {
-    return await this.put<Client, void>(id, client);
+  async getByDocumentNumber(documentNumber: string): Promise<Client> {
+    return await this.get<Client>(`clients?document=${encodeURIComponent(documentNumber)}`);
+  }
+
+  async update(client: Client): Promise<string> {
+    return await this.put<Client, string>("", client);
+  }
+
+  async uploadCsvForImport(formData: FormData): Promise<void> {
+    await this.post("import-csv", formData);
   }
 }
 
