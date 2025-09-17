@@ -25,6 +25,10 @@ class ClientService extends BaseService {
   async update(client: Client): Promise<string> {
     return await this.put<Client, string>("", client);
   }
+
+  async uploadCsvForImport(formData: FormData): Promise<void> {
+    await this.post("import-csv", formData);
+  }
 }
 
 export default new ClientService();

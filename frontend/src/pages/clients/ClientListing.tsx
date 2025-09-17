@@ -1,5 +1,5 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { Button, Card, Row } from "react-bootstrap";
+import React, { Suspense, useEffect, useState, useRef, ChangeEvent } from "react";
+import { Button, Card, Row, Col, ButtonGroup } from "react-bootstrap";
 import { NAVIGATION_PATH } from "@/constants";
 import { Client } from "@/types/api/Client";
 import DataTable, { DataTableType } from "@/components/DataTable";
@@ -15,6 +15,33 @@ import { formatDateToDisplay } from "@/utils/dateUtils";
 const ClientListing = () => {
     const navigate = useNavigate();
     const [date, setDate] = useState<Date>();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleImportClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            await ClientService.uploadCsvForImport(formData);
+            alert("Arquivo enviado com sucesso para processamento.");            
+        } catch (error) {
+            console.error("Erro ao enviar o arquivo:", error);
+            alert("Falha ao enviar o arquivo.");
+        }
+
+        if (event.target) {
+            event.target.value = "";
+        }
+    };
 
     const clientFilters: TextFormFieldProps<any>[] = [
         {
@@ -34,9 +61,23 @@ const ClientListing = () => {
 
     return <>
         <Row style={{ justifyContent: "end", margin: "10px 0" }}>
-            <Link to={NAVIGATION_PATH.CLIENTS.CREATE.ABSOLUTE}>
-                <Button style={{ maxWidth: "fit-content", float: "right" }}>Adicionar</Button>
-            </Link>
+            <Col xs="auto">
+                <div style={{ display: "flex", gap: 10 }}>
+                    <Button variant="success" onClick={handleImportClick}>
+                        Importar
+                    </Button>
+                    <Button variant="primary" onClick={() => navigate(NAVIGATION_PATH.CLIENTS.CREATE.ABSOLUTE)}>
+                        Adicionar
+                    </Button>
+                </div>
+            </Col>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+                accept=".csv"
+            />
         </Row>
         <Card >
             <Card.Title></Card.Title>
